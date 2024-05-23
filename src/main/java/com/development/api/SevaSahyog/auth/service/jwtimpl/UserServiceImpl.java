@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
     private final NgoAccountRepo accountRepo;
 
-
     @Override
     public UserDetailsService userDetailsService() {
         return username -> accountRepo.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));

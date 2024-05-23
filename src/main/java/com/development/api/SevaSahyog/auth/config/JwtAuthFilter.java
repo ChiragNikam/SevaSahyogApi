@@ -15,7 +15,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.apache.commons.lang3.StringUtils;
-
 import java.io.IOException;
 
 @Component
@@ -67,6 +66,30 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 SecurityContextHolder.setContext(securityContext);  // Set the security context to the holder
             }
         }
+
+//        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+//            // Extract the JWT token from the Authorization header
+//            String jwtToken = authHeader.substring(7);
+//
+//            // Extracting user email from the JWT token
+//            String userEmail = jwtService.extractUserName(jwtToken);
+//
+//            if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+//                // Load user details using the user email
+//                UserDetails userDetails = jwtService.loadUserByUsername(userEmail);
+//
+//                if (jwtService.isTokenValid(jwtToken, userDetails)) {
+//                    // Create authentication token
+//                    UsernamePasswordAuthenticationToken authenticationToken =
+//                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+//
+//                    authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+//
+//                    // Set the authentication token in the SecurityContext
+//                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+//                }
+//            }
+//        }
 
         // Proceed with the next filter
         filterChain.doFilter(request, response);

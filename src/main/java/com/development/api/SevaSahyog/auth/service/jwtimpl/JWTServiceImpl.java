@@ -4,10 +4,11 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import com.development.api.SevaSahyog.auth.service.JWTService;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.cglib.core.internal.Function;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
 import java.util.Base64;
@@ -48,8 +49,8 @@ public class JWTServiceImpl implements JWTService {
     }
 
     private Key getSigninKey() {
-        byte[] apiKeySecretBytes = Base64.getDecoder().decode(SECRET_KEY_BASE64);
-        return new SecretKeySpec(apiKeySecretBytes, io.jsonwebtoken.SignatureAlgorithm.HS256.getJcaName());
+        byte[] apiKeySecretBytes = Decoders.BASE64.decode(SECRET_KEY_BASE64);
+        return Keys.hmacShaKeyFor(apiKeySecretBytes);
     }
 
     private boolean isTokenExpired(String token){

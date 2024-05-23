@@ -2,6 +2,7 @@ package com.development.api.SevaSahyog.auth.controller;
 
 import com.development.api.SevaSahyog.auth.data.NgoAccount;
 import com.development.api.SevaSahyog.auth.dto.SignInRequest;
+import com.development.api.SevaSahyog.auth.dto.SignInResponse;
 import com.development.api.SevaSahyog.auth.dto.SignUpRequest;
 import com.development.api.SevaSahyog.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -21,13 +22,13 @@ public class Authentication {
 
     @PostMapping(path = "/signIn")
     public ResponseEntity<?> login(@RequestBody SignInRequest signInRequest){
-        String token = "";
+        SignInResponse response = null;
         try{
-            token = authService.signIn(signInRequest);
+            response = authService.signIn(signInRequest);
         } catch (Exception e){
             return ResponseEntity.ok(e.getLocalizedMessage());
         }
-        return ResponseEntity.status(HttpStatus.OK).body(token);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PostMapping(path = "/signUp")

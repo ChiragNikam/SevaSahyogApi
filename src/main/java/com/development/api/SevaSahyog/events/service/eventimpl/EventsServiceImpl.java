@@ -44,64 +44,37 @@ public class EventsServiceImpl implements EventsService {
     }
 
     @Override
-    public Event updateEvent(Event updatedEvent) {
+    public Event updateEvent(Event updateEvent) {
 
-        Optional<Event> oldEventOpt = eventsRepo.findById((long) updatedEvent.getEventId());
-        Event oldEvent = oldEventOpt.get();
-        Event newUpdatedEvent = new Event();
-        // check for old data and updated data
-        // id
-        updatedEvent.setEventId(oldEventOpt.get().getEventId());
-        // name
-        if (updatedEvent.getName() == null) {
-            newUpdatedEvent.setName(oldEvent.getName());
-        } else {
-            newUpdatedEvent.setName(updatedEvent.getName());
-        }
-        // short desc
-        if (updatedEvent.getShortDesc() == null) {
-            newUpdatedEvent.setShortDesc(oldEvent.getShortDesc());
-        } else {
-            newUpdatedEvent.setShortDesc(updatedEvent.getShortDesc());
-        }
+        Optional<Event> oldEventOpt = eventsRepo.findById((long) updateEvent.getEventId());
+        Event existingEvent = null;
+        if (oldEventOpt.isPresent()){
+            existingEvent = oldEventOpt.get();
 
-        // long desc
-        if (updatedEvent.getLongDesc() == null) {
-            newUpdatedEvent.setLongDesc(oldEvent.getLongDesc());
+            if (updateEvent.getName() != null) existingEvent.setName(updateEvent.getName());
+            if (updateEvent.getShortDesc() != null) existingEvent.setShortDesc(updateEvent.getShortDesc());
+            if (updateEvent.getLongDesc() != null) existingEvent.setLongDesc(updateEvent.getLongDesc());
+            if (updateEvent.getOrganizer() != null) existingEvent.setOrganizer(updateEvent.getOrganizer());
+            if (updateEvent.getLocation() != null) existingEvent.setLocation(updateEvent.getLocation());
+            if (updateEvent.getDd() != 0) existingEvent.setDd(updateEvent.getDd());
+            if (updateEvent.getMm() != 0) existingEvent.setMm(updateEvent.getMm());
+            if (updateEvent.getYyyy() != 0) existingEvent.setYyyy(updateEvent.getYyyy());
+            if (updateEvent.getStatus() != 0) existingEvent.setStatus(updateEvent.getStatus());
+
+            return eventsRepo.save(existingEvent);
         } else {
-            newUpdatedEvent.setLongDesc(updatedEvent.getLongDesc());
+            throw new IllegalArgumentException("Unable to update event");
         }
 
-        // organizer
-        if (updatedEvent.getOrganizer() == null) {
-            newUpdatedEvent.setOrganizer(oldEvent.getOrganizer());
+    }
+
+    @Override
+    public void deleteEvent(long id) {
+        Optional<Event> eventToDeleteOpt = eventsRepo.findById(id);
+        if (eventToDeleteOpt.isPresent()){
+            eventsRepo.delete(eventToDeleteOpt.get());
         } else {
-            newUpdatedEvent.setOrganizer(updatedEvent.getOrganizer());
+            throw new IllegalArgumentException("Event Not Found");
         }
-
-        // location
-        if (updatedEvent.getLocation() == null) {
-            newUpdatedEvent.setLocation(oldEvent.getLocation());
-        } else {
-            newUpdatedEvent.setLocation(updatedEvent.getLocation());
-        }
-
-        // dd
-//        if (updatedEvent.getDd() == null){
-//            newUpdatedEvent.setShortDesc(oldEvent.getShortDesc());
-//        } else {
-//            newUpdatedEvent.setShortDesc(updatedEvent.getShortDesc());
-//        }
-
-        // mm
-
-        // yyyy
-
-        // status
-
-        // ngo account
-        newUpdatedEvent.setNgoAccount(oldEvent.getNgoAccount());
-
-        return null;
     }
 }

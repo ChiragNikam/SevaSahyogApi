@@ -63,13 +63,25 @@ public class EventsController {
     }
 
     @PutMapping
-    public String updateEvent(){
-        return "update event";
+    public ResponseEntity<?> updateEvent(@RequestBody Event event){
+        Event updatedEvent = null;
+        try {
+            updatedEvent = eventsService.updateEvent(event);
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getClass() + ": " + e.getLocalizedMessage());
+        }
+
+        return ResponseEntity.ok(updatedEvent);
     }
 
-    @DeleteMapping
-    public String deleteEvent(){
-        return "delete event";
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<?> deleteEvent(@PathVariable long id){
+        try {
+            eventsService.deleteEvent(id);
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getLocalizedMessage());
+        }
+
+        return ResponseEntity.ok("Event Deleted Successfully");
     }
 }
-

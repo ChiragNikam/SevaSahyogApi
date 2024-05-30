@@ -1,6 +1,5 @@
 package com.development.api.SevaSahyog.auth.config;
 
-import com.development.api.SevaSahyog.auth.controller.Authentication;
 import com.development.api.SevaSahyog.auth.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

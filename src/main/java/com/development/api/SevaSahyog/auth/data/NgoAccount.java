@@ -1,5 +1,6 @@
 package com.development.api.SevaSahyog.auth.data;
 
+import com.development.api.SevaSahyog.events.data.Event;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,31 +19,36 @@ public class NgoAccount implements UserDetails {
 
     // user details
     private String profileImage;
-
     @Column(nullable = false)
     private String userName;
-
     @Column(nullable = false, unique = true)
     private String mobileNo;
-
     @Column(nullable = false, unique = true)
     private String email;
-
     @Column(nullable = false)
     private String password;
 
     // users ngo details
     private String ngoImage;
-
     @Column(nullable = false)
     private String ngoName;
-
     private String location;
-
     private String aboutNgo;
+    //event mapping
+    @OneToMany
+    private List<Event> event;
 
+    // getters and setters
     public String getAboutNgo() {
         return aboutNgo;
+    }
+
+    public List<Event> getEvent() {
+        return event;
+    }
+
+    public void setEvent(List<Event> event) {
+        this.event = event;
     }
 
     public void setAboutNgo(String aboutNgo) {

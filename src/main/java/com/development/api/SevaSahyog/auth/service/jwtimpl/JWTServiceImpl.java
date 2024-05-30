@@ -6,8 +6,10 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import com.development.api.SevaSahyog.auth.service.JWTService;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.cglib.core.internal.Function;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
@@ -15,6 +17,7 @@ import java.util.Base64;
 import java.util.Date;
 
 @Service
+@Component
 public class JWTServiceImpl implements JWTService {
 
     private static final String SECRET_KEY_BASE64 = "413F4428472B4B6250655368566D597089489UR8U493URE89";
@@ -57,3 +60,4 @@ public class JWTServiceImpl implements JWTService {
         return extractClaim(token, Claims::getExpiration).before(new Date());
     }
 }
+

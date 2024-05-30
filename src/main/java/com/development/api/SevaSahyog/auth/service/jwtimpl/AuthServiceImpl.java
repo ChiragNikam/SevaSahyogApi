@@ -48,7 +48,9 @@ public class AuthServiceImpl implements AuthService {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signInRequest.getEmail(), signInRequest.getPassword()));
 
         NgoAccount account = ngoAccountRepo.findByEmail(signInRequest.getEmail()).orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
-
+        if (!passwordEncoder.matches(signInRequest.getPassword(), account.getPassword())){
+            throw new IllegalArgumentException("Invalid password");
+        }
         SignInResponse response = new SignInResponse();
         response.setToken(jwtService.generateToken(account));
         response.setNgoAccount(account);

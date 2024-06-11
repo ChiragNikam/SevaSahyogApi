@@ -1,6 +1,7 @@
 package com.development.api.SevaSahyog.auth.controller;
 
 import com.development.api.SevaSahyog.auth.data.NgoAccount;
+import com.development.api.SevaSahyog.auth.dto.ErrorResponse;
 import com.development.api.SevaSahyog.auth.dto.SignInRequest;
 import com.development.api.SevaSahyog.auth.dto.SignInResponse;
 import com.development.api.SevaSahyog.auth.dto.SignUpRequest;
@@ -27,7 +28,7 @@ public class AuthenticationNgo {
         try{
             response = authService.signIn(signInRequest);
         } catch (Exception e){
-            return ResponseEntity.ok(e.getLocalizedMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(HttpStatus.CONFLICT.value(), e.getLocalizedMessage()));
         }
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
@@ -40,7 +41,7 @@ public class AuthenticationNgo {
         } catch (DataIntegrityViolationException dataException){
             return ResponseEntity.ok("Correct your data");
         } catch (Exception e){
-            return ResponseEntity.ok(e.getClass());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(HttpStatus.CONFLICT.value(), e.getLocalizedMessage()));
         }
         return ResponseEntity.ok(account);
     }

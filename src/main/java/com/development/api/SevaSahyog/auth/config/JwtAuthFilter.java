@@ -2,11 +2,13 @@ package com.development.api.SevaSahyog.auth.config;
 
 import com.development.api.SevaSahyog.auth.service.JWTService;
 import com.development.api.SevaSahyog.auth.service.UserService;
+import com.development.api.SevaSahyog.exception.TokenExpiredException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,7 +43,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         // Extract the JWT from the Authorization header
         jwt = authHeader.substring(7);
         // Extract the username (email) from the JWT
-        userEmail = jwtService.extractUserName(jwt);
+        try {
+            userEmail = jwtService.extractUserName(jwt);
+        } catch (TokenExpiredException e) {
+            // If the token is expired, propagate the exception to be handled by the global handler
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.getWriter().write(e.getLocalizedMessage());
+            return;
+        }
 
         // Check if the username is not empty and the user is not authenticated yet
         if (StringUtils.isNotEmpty(userEmail) && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -66,30 +75,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 SecurityContextHolder.setContext(securityContext);  // Set the security context to the holder
             }
         }
-
-//        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-//            // Extract the JWT token from the Authorization header
-//            String jwtToken = authHeader.substring(7);
-//
-//            // Extracting user email from the JWT token
-//            String userEmail = jwtService.extractUserName(jwtToken);
-//
-//            if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-//                // Load user details using the user email
-//                UserDetails userDetails = jwtService.loadUserByUsername(userEmail);
-//
-//                if (jwtService.isTokenValid(jwtToken, userDetails)) {
-//                    // Create authentication token
-//                    UsernamePasswordAuthenticationToken authenticationToken =
-//                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-//
-//                    authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-//
-//                    // Set the authentication token in the SecurityContext
-//                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-//                }
-//            }
-//        }
 
         // Proceed with the next filter
         filterChain.doFilter(request, response);

@@ -1,6 +1,8 @@
 package com.development.api.SevaSahyog.auth.service.jwtimpl;
 
+import com.development.api.SevaSahyog.exception.TokenExpiredException;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import com.development.api.SevaSahyog.auth.service.JWTService;
@@ -31,8 +33,8 @@ public class JWTServiceImpl implements JWTService {
     public String generateToken(UserDetails userDetails) {
         return Jwts.builder().setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60*24*30))
-                .signWith(SignatureAlgorithm.HS256, getSigninKey())
+                .setExpiration(new Date(System.currentTimeMillis() + 60*24*30))
+                .signWith(getSigninKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
@@ -42,13 +44,18 @@ public class JWTServiceImpl implements JWTService {
         return (userName.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    private <T> T extractClaim(String token, Function<Claims, T> claimsResolvers){
-        final Claims claims = extractAllClaims(token);
-        return claimsResolvers.apply(claims);
+    // Method to validate token
+    private Claims extractAllClaims(String token) {
+        try {
+            return Jwts.parser().setSigningKey(getSigninKey()).parseClaimsJws(token).getBody();
+        } catch (ExpiredJwtException e){
+            throw new TokenExpiredException("Token has expired", e);
+        }
     }
 
-    private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(getSigninKey()).parseClaimsJws(token).getBody();
+    private <T> T extractClaim(String token, Function<Claims, T> claimsResolvers){
+            final Claims claims = extractAllClaims(token);
+            return claimsResolvers.apply(claims);
     }
 
     private Key getSigninKey() {

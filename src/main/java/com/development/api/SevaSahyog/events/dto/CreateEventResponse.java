@@ -6,12 +6,20 @@ public class CreateEventResponse {
     private String shortDesc;
     private String longDesc;
     private String organizer;
+    private String organizerPhone;
     private String location;
     private int dd;
     private int mm;
     private int yyyy;
     private int status;
 
+    public String getOrganizerPhone() {
+        return organizerPhone;
+    }
+
+    public void setOrganizerPhone(String organizerPhone) {
+        this.organizerPhone = organizerPhone;
+    }
 
     public int getDd() {
         return dd;

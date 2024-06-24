@@ -55,6 +55,7 @@ public class EventsServiceImpl implements EventsService {
             if (updateEvent.getShortDesc() != null) existingEvent.setShortDesc(updateEvent.getShortDesc());
             if (updateEvent.getLongDesc() != null) existingEvent.setLongDesc(updateEvent.getLongDesc());
             if (updateEvent.getOrganizer() != null) existingEvent.setOrganizer(updateEvent.getOrganizer());
+            if (updateEvent.getOrganizerPhone() != null) existingEvent.setOrganizerPhone(updateEvent.getOrganizerPhone());
             if (updateEvent.getLocation() != null) existingEvent.setLocation(updateEvent.getLocation());
             if (updateEvent.getDd() != 0) existingEvent.setDd(updateEvent.getDd());
             if (updateEvent.getMm() != 0) existingEvent.setMm(updateEvent.getMm());

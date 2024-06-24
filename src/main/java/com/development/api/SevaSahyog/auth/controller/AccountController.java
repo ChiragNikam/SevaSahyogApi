@@ -19,7 +19,7 @@ public class AccountController {
     public final NgoAccountRepo ngoAccountRepo;
 
     @GetMapping("/ngo/{userId}")
-    public ResponseEntity<?> getNgoAccount(@PathVariable String userId) {
+    public ResponseEntity<?> getNgoAccount(@PathVariable String userId) {   // get ngo account by it's userId
         Optional<NgoAccount> accountData = Optional.empty();
         try {
             accountData = ngoAccountRepo.findById(userId);
@@ -32,4 +32,9 @@ public class AccountController {
         else
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(HttpStatus.CONFLICT.value(), "Account not found"));
     }
+
+//    @PutMapping
+//    public ResponseEntity<?> updateNgoAccount(@RequestBody){
+//
+//    }
 }

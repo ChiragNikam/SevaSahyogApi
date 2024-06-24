@@ -34,6 +34,7 @@ public class NgoAccount implements UserDetails {
     private String ngoName;
     private String location;
     private String aboutNgo;
+    private String longDesc;
     //event mapping
     @OneToMany
     private List<Event> event;
@@ -130,8 +131,6 @@ public class NgoAccount implements UserDetails {
     public void setUserId(String userId) {
         this.userId = userId;
     }
-
-    private String longDesc;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

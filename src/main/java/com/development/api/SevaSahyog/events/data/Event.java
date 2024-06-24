@@ -14,6 +14,7 @@ public class Event {
     private String longDesc;
     @Column(nullable = false)
     private String organizer;
+    private String organizerPhone;
     private String location;
     private int dd;
     private int mm;
@@ -22,6 +23,14 @@ public class Event {
     private int status; // from 0:Past, 1:Ongoing, 2:Upcoming
     @ManyToOne
     private NgoAccount ngoAccount;
+
+    public String getOrganizerPhone() {
+        return organizerPhone;
+    }
+
+    public void setOrganizerPhone(String organizerPhone) {
+        this.organizerPhone = organizerPhone;
+    }
 
     public NgoAccount getNgoAccount() {
         return ngoAccount;

@@ -13,6 +13,7 @@ public class BuildResponse {
         eventResponse.setShortDesc(savedEvent.getShortDesc());
         eventResponse.setLongDesc(savedEvent.getLongDesc());
         eventResponse.setOrganizer(savedEvent.getOrganizer());
+        eventResponse.setOrganizerPhone(savedEvent.getOrganizerPhone());
         eventResponse.setLocation(savedEvent.getLocation());
         eventResponse.setDd(savedEvent.getDd());
         eventResponse.setMm(savedEvent.getMm());

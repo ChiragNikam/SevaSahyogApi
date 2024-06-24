@@ -2,6 +2,7 @@ package com.development.api.SevaSahyog.auth.controller;
 
 import com.development.api.SevaSahyog.auth.data.NgoAccount;
 import com.development.api.SevaSahyog.auth.dto.ErrorResponse;
+import com.development.api.SevaSahyog.auth.dto.UpdateNgoAccountRequest;
 import com.development.api.SevaSahyog.auth.repo.NgoAccountRepo;
 import com.development.api.SevaSahyog.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import java.util.Optional;
 public class AccountController {
 
     public final NgoAccountRepo ngoAccountRepo;
+    public final AuthService authService;
 
     @GetMapping("/ngo/{userId}")
     public ResponseEntity<?> getNgoAccount(@PathVariable String userId) {   // get ngo account by it's userId
@@ -33,8 +35,13 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(HttpStatus.CONFLICT.value(), "Account not found"));
     }
 
-//    @PutMapping
-//    public ResponseEntity<?> updateNgoAccount(@RequestBody){
-//
-//    }
+    @PutMapping("/ngo/{userId}")
+    public ResponseEntity<?> updateNgoAccount(@RequestBody UpdateNgoAccountRequest updatedNgoAccount, @PathVariable String userId) {
+        try {
+            NgoAccount updatedAccount = authService.updateNgoAccount(updatedNgoAccount, userId);
+            return ResponseEntity.ok(updatedAccount);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(HttpStatus.CONFLICT.value(), e.getLocalizedMessage()));
+        }
+    }
 }

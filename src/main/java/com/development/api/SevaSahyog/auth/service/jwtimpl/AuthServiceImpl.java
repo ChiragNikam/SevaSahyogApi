@@ -4,6 +4,7 @@ import com.development.api.SevaSahyog.auth.data.NgoAccount;
 import com.development.api.SevaSahyog.auth.dto.SignInRequest;
 import com.development.api.SevaSahyog.auth.dto.SignInResponse;
 import com.development.api.SevaSahyog.auth.dto.SignUpRequest;
+import com.development.api.SevaSahyog.auth.dto.UpdateNgoAccountRequest;
 import com.development.api.SevaSahyog.auth.repo.NgoAccountRepo;
 import com.development.api.SevaSahyog.auth.service.AuthService;
 import com.development.api.SevaSahyog.auth.service.JWTService;
@@ -13,6 +14,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -56,5 +59,26 @@ public class AuthServiceImpl implements AuthService {
         response.setNgoAccount(account);
 
         return response;
+    }
+
+    @Override
+    public NgoAccount updateNgoAccount(UpdateNgoAccountRequest updatedData, String userId) {
+        Optional<NgoAccount> oldAccountDataOpt = ngoAccountRepo.findById(userId);
+        NgoAccount existingNgoAccount = null;
+        if (oldAccountDataOpt.isPresent()){
+            existingNgoAccount = oldAccountDataOpt.get();
+
+            existingNgoAccount.setUserName(updatedData.getUserName());
+            existingNgoAccount.setMobileNo(updatedData.getMobileNo());
+            existingNgoAccount.setEmail(updatedData.getEmail());
+            existingNgoAccount.setNgoName(updatedData.getNgoName());
+            existingNgoAccount.setLocation(updatedData.getLocation());
+            existingNgoAccount.setAboutNgo(updatedData.getAboutNgo());
+            existingNgoAccount.setLongDesc(updatedData.getLongDesc());
+
+            return ngoAccountRepo.save(existingNgoAccount);
+        }else {
+            throw new IllegalArgumentException("Unable to find User");
+        }
     }
 }

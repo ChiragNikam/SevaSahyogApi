@@ -5,8 +5,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class SignInRequest {
-    private String email;
-    private String password;
-
+public class UpdatePicsRequest {
+    private String profilePicUrl;
+    private String backgroundPicUrl;
 }

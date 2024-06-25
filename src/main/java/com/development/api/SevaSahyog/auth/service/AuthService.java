@@ -11,5 +11,5 @@ public interface AuthService {
 
     NgoAccount signUp(SignUpRequest signUpRequest);
 
-    NgoAccount updateNgoAccount(UpdateNgoAccountRequest updatedData, String userId);
+
 }

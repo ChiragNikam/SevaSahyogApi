@@ -3,8 +3,9 @@ package com.development.api.SevaSahyog.auth.controller;
 import com.development.api.SevaSahyog.auth.data.NgoAccount;
 import com.development.api.SevaSahyog.auth.dto.ErrorResponse;
 import com.development.api.SevaSahyog.auth.dto.UpdateNgoAccountRequest;
+import com.development.api.SevaSahyog.auth.dto.UpdatePicsRequest;
 import com.development.api.SevaSahyog.auth.repo.NgoAccountRepo;
-import com.development.api.SevaSahyog.auth.service.AuthService;
+import com.development.api.SevaSahyog.auth.service.NgoAccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +19,10 @@ import java.util.Optional;
 public class AccountController {
 
     public final NgoAccountRepo ngoAccountRepo;
-    public final AuthService authService;
+    public final NgoAccountService ngoAccountService;
 
     @GetMapping("/ngo/{userId}")
-    public ResponseEntity<?> getNgoAccount(@PathVariable String userId) {   // get ngo account by it's userId
+    public ResponseEntity<?> getNgoAccount(@PathVariable String userId) {   // get ngo account by its userId
         Optional<NgoAccount> accountData = Optional.empty();
         try {
             accountData = ngoAccountRepo.findById(userId);
@@ -38,7 +39,17 @@ public class AccountController {
     @PutMapping("/ngo/{userId}")
     public ResponseEntity<?> updateNgoAccount(@RequestBody UpdateNgoAccountRequest updatedNgoAccount, @PathVariable String userId) {
         try {
-            NgoAccount updatedAccount = authService.updateNgoAccount(updatedNgoAccount, userId);
+            NgoAccount updatedAccount = ngoAccountService.updateNgoAccount(updatedNgoAccount, userId);
+            return ResponseEntity.ok(updatedAccount);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(HttpStatus.CONFLICT.value(), e.getLocalizedMessage()));
+        }
+    }
+
+    @PutMapping("/ngo/updateImage/{userId}")
+    public ResponseEntity<?> updateProfileAndBackgroundPic(@PathVariable String userId, @RequestBody UpdatePicsRequest updatePicsRequest){
+        try {
+            NgoAccount updatedAccount = ngoAccountService.updateNgoAccountPics(userId, updatePicsRequest);
             return ResponseEntity.ok(updatedAccount);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(HttpStatus.CONFLICT.value(), e.getLocalizedMessage()));

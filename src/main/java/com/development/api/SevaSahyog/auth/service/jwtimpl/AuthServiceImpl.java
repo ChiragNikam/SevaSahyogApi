@@ -60,25 +60,4 @@ public class AuthServiceImpl implements AuthService {
 
         return response;
     }
-
-    @Override
-    public NgoAccount updateNgoAccount(UpdateNgoAccountRequest updatedData, String userId) {
-        Optional<NgoAccount> oldAccountDataOpt = ngoAccountRepo.findById(userId);
-        NgoAccount existingNgoAccount = null;
-        if (oldAccountDataOpt.isPresent()){
-            existingNgoAccount = oldAccountDataOpt.get();
-
-            existingNgoAccount.setUserName(updatedData.getUserName());
-            existingNgoAccount.setMobileNo(updatedData.getMobileNo());
-            existingNgoAccount.setEmail(updatedData.getEmail());
-            existingNgoAccount.setNgoName(updatedData.getNgoName());
-            existingNgoAccount.setLocation(updatedData.getLocation());
-            existingNgoAccount.setAboutNgo(updatedData.getAboutNgo());
-            existingNgoAccount.setLongDesc(updatedData.getLongDesc());
-
-            return ngoAccountRepo.save(existingNgoAccount);
-        }else {
-            throw new IllegalArgumentException("Unable to find User");
-        }
-    }
 }

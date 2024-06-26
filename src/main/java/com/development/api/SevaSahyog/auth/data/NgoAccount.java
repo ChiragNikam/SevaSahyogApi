@@ -39,9 +39,14 @@ public class NgoAccount implements UserDetails {
     private String location;
     private String aboutNgo;
     private String longDesc;
+
     //event mapping
     @OneToMany
     private List<Event> event;
+
+    public String getUserName(){
+        return userName;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

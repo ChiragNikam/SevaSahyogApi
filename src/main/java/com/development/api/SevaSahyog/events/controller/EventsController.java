@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -97,4 +98,13 @@ public class EventsController {
         }
     }
 
+    @GetMapping(path = "/user/{id}/pastEventYears")
+    public ResponseEntity<?> getEventYears(@PathVariable String id) {
+        try {
+            Set<Integer> eventYears = eventsService.getEventYears(id);
+            return ResponseEntity.ok(eventYears);
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getLocalizedMessage());
+        }
+    }
 }

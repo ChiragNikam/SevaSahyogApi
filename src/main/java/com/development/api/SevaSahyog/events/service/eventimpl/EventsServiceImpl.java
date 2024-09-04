@@ -9,6 +9,8 @@ import com.development.api.SevaSahyog.events.service.EventsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -77,5 +79,29 @@ public class EventsServiceImpl implements EventsService {
         } else {
             throw new IllegalArgumentException("Event Not Found");
         }
+    }
+
+    @Override
+    public List<Event> filterUpcomingEvents(String userId){
+        // get all the events to filter
+        List<Event> allEvents = eventsRepo.findByNgoAccountUserId(userId);;
+
+        List<Event> upcomingEvents = new ArrayList<>();
+
+        LocalDate currentDate = LocalDate.now();
+//        int todayDate = currentDate.getDayOfMonth();
+
+        // filter upcoming events
+        for (Event currentEvent : allEvents) {
+
+            // Create LocalDate from event's date fields
+            LocalDate eventDate = LocalDate.of(currentEvent.getYyyy(), currentEvent.getMm(), currentEvent.getDd());
+
+            if (!eventDate.isBefore(currentDate)) { // add event to list if event date is today or after today
+                upcomingEvents.add(currentEvent);
+            }
+        }
+
+        return upcomingEvents;
     }
 }

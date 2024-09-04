@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -84,4 +86,15 @@ public class EventsController {
 
         return ResponseEntity.ok("Event Deleted Successfully");
     }
+
+    @GetMapping(path = "/user/{id}/upcoming")
+    public ResponseEntity<?> getUpcomingEvents(@PathVariable String id) {
+        try{
+            List<Event> upcomingEvents = eventsService.filterUpcomingEvents(id);
+            return ResponseEntity.ok(upcomingEvents);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getLocalizedMessage());
+        }
+    }
+
 }

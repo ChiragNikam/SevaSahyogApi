@@ -16,4 +16,6 @@ public interface EventsService {
     Event updateEvent(Event updatedEvent);
 
     void deleteEvent(long id);
+
+    List<Event> filterUpcomingEvents(String userId);
 }

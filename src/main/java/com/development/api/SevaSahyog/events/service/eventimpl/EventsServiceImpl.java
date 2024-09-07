@@ -33,7 +33,7 @@ public class EventsServiceImpl implements EventsService {
     }
 
     @Override
-    public List<Event> getEventById(String userId) {
+    public List<Event> getEventByUserId(String userId) {
         return eventsRepo.findByNgoAccountUserId(userId);
     }
 
@@ -115,5 +115,15 @@ public class EventsServiceImpl implements EventsService {
         }
         
         return eventYears;
+    }
+
+    @Override
+    public Event getEventByItsId(long eventId){
+        Optional<Event> event = eventsRepo.findById(eventId);
+        if (event.isPresent()) {
+            return event.get();
+        } else {
+            throw new IllegalArgumentException("Event Not Found");
+        }
     }
 }

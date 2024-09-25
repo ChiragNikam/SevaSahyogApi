@@ -10,9 +10,11 @@ public interface EventsService {
 
     Event saveEvent(CreateEventRequest eventData);
 
-    List<Event> getEventById(String userId);
+    List<Event> getEventByUserId(String userId);
 
     List<Event> getAllEvents();
+
+    Event getEventByItsId(long eventId);
 
     Event updateEvent(Event updatedEvent);
 

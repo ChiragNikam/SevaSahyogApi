@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -32,15 +31,25 @@ public class EventsController {
         return ResponseEntity.ok(allEvents);
     }
 
-    @GetMapping(path = "/user/{id}") // to get a single event by its id
-    public ResponseEntity<?> getEventsById(@PathVariable String id) {
+    @GetMapping(path = "/user/{id}") // to get a single event under a user
+    public ResponseEntity<?> getEventsByUserId(@PathVariable String id) {
         try {
-            List<Event> events = eventsService.getEventById(id);
+            List<Event> events = eventsService.getEventByUserId(id);
             if (events.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No events found for userId: " + id);
             }
             return ResponseEntity.ok(events);
         } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getClass() + ": " + e.getLocalizedMessage());
+        }
+    }
+
+    @GetMapping(path = "/user/{userId}/{eventId}")
+    public ResponseEntity<?> getEventByItsId(@PathVariable String userId, @PathVariable long eventId){
+        try{
+            Event eventToSearch = eventsService.getEventByItsId(eventId);
+            return ResponseEntity.ok(eventToSearch);
+        } catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getClass() + ": " + e.getLocalizedMessage());
         }
     }

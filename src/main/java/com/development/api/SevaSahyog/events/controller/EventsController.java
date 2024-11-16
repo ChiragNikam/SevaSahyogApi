@@ -86,6 +86,21 @@ public class EventsController {
         return ResponseEntity.ok(updatedEvent);
     }
 
+    @PutMapping(path = "{eventId}/eventImages")
+    public ResponseEntity<?> updateEventImagesUrls(@PathVariable Integer eventId, @RequestBody List<String> eventImages) {
+        // get event of which images are to be updated
+        Event eventToUpdate = eventsService.getEventByItsId(eventId);
+        eventToUpdate.setEventImagesUrls(eventImages);
+        Event updatedEvent;
+        try {
+            updatedEvent = eventsService.updateEvent(eventToUpdate);    // finally update event after setting image list to it
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getClass() + ": " + e.getLocalizedMessage());
+        }
+
+        return ResponseEntity.ok(updatedEvent);
+    }
+
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteEvent(@PathVariable long id){
         try {

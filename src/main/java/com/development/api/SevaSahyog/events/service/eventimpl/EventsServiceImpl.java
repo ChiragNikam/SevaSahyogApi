@@ -118,6 +118,12 @@ public class EventsServiceImpl implements EventsService {
     }
 
     @Override
+    public Event updatedEventWithEventImages(Event eventToUpdate, List<String> eventImages) {
+        eventToUpdate.setEventImagesUrls(eventImages);
+        return eventToUpdate;
+    }
+
+    @Override
     public Event getEventByItsId(long eventId){
         Optional<Event> event = eventsRepo.findById(eventId);
         if (event.isPresent()) {
@@ -126,4 +132,6 @@ public class EventsServiceImpl implements EventsService {
             throw new IllegalArgumentException("Event Not Found");
         }
     }
+
+
 }

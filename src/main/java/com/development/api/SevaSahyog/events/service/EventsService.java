@@ -23,4 +23,6 @@ public interface EventsService {
     List<Event> filterUpcomingEvents(String userId);
 
     Set<Integer> getEventYears(String userId);
+
+    Event updatedEventWithEventImages(Event eventToUpdate, List<String> eventImages);
 }

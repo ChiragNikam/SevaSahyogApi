@@ -17,6 +17,7 @@ public class Event {
     @Column(nullable = false)
     private String name;
     private String shortDesc;
+    @Column(length = 1000)
     private String longDesc;
     @Column(nullable = false)
     private String organizer;
